@@ -1,0 +1,28 @@
+function CheckGroupMembership {
+    Import-Module ActiveDirectory
+    $csvPath = "D:\Users\jshamoon\Desktop\scriptdocuments\usernames.csv"
+    $usernames = Import-Csv -Path $csvPath
+    $standardGroup1 = "FUNC-BeyondTrust-StandardAccounts"
+    $standardGroup2 = "POL-BeyondTrust-Password-AutoApproval"
+
+    foreach ($username in $usernames) {
+        $accountName = $username.usernames
+        $account = Get-ADUser -Filter "SamAccountName -eq '$accountName'" -ErrorAction SilentlyContinue
+
+        if ($account) {
+            $groups = Get-ADPrincipalGroupMembership $account | Select-Object -ExpandProperty Name
+            $group1Check = $standardGroup1 -in $groups
+            $group2Check = $standardGroup2 -in $groups
+
+            if ($group1Check -and $group2Check) {
+                Write-Host "Y"
+            } else {
+                Write-Host "N"
+            }
+        } else {
+            Write-Host "N"
+        }
+    }
+}
+
+CheckGroupMembership
