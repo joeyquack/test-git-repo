@@ -6,7 +6,7 @@ function CheckGroupMembership {
     $standardGroup2 = "POL-BeyondTrust-Password-AutoApproval"
 
     foreach ($username in $usernames) {
-        $accountName = $username.usernames
+        $accountName = $username.usernames # Make sure 'usernames' matches the column name in your CSV
         $account = Get-ADUser -Filter "SamAccountName -eq '$accountName'" -ErrorAction SilentlyContinue
 
         if ($account) {
@@ -14,11 +14,8 @@ function CheckGroupMembership {
             $group1Check = $standardGroup1 -in $groups
             $group2Check = $standardGroup2 -in $groups
 
-            if ($group1Check -and $group2Check) {
-                Write-Host "$accountName: Y"
-            } else {
-                Write-Host "$accountName: N"
-            }
+            $status = if ($group1Check -and $group2Check) { "Y" } else { "N" }
+            Write-Host "$accountName: $status"
         } else {
             Write-Host "$accountName: N"
         }
