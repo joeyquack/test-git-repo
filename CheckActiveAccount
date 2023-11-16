@@ -4,13 +4,14 @@ function CheckActiveAccount {
     $usernames = Import-Csv -Path $csvPath
 
     foreach ($username in $usernames) {
-        $accountNameA = $username.usernames + "-a"
+        $accountName = $username.usernames
+        $accountNameA = $accountName + "-a"
         $accountA = Get-ADUser -Filter "SamAccountName -eq '$accountNameA'" -Properties Enabled -ErrorAction SilentlyContinue
 
         if ($accountA -and $accountA.Enabled) {
-            Write-Host "Y"
+            Write-Host "$accountName: Y"
         } else {
-            Write-Host "N"
+            Write-Host "$accountName: N"
         }
     }
 }
