@@ -4,12 +4,16 @@ function CheckActiveAccount {
     $usernames = Import-Csv -Path $csvPath
 
     foreach ($username in $usernames) {
-        $accountName = $username.usernames # Replace 'usernames' with your CSV column name
+        $accountName = $username.usernames # Ensure 'usernames' matches your CSV column name
         $accountNameA = $accountName + "-a"
         $accountA = Get-ADUser -Filter "SamAccountName -eq '$accountNameA'" -Properties Enabled -ErrorAction SilentlyContinue
 
-        $status = if ($accountA -and $accountA.Enabled) { "Y" } else { "N" }
-        Write-Host "$accountName active: $status"
+        if ($accountA -and $accountA.Enabled) {
+            $isActive = "Y"
+        } else {
+            $isActive = "N"
+        }
+        Write-Host "$accountNameA active: $isActive"
     }
 }
 
