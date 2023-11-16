@@ -1,0 +1,50 @@
+function accountscript2 {
+
+    # Import the required module for Active Directory
+    Import-Module ActiveDirectory
+
+    # Define the path to the CSV file
+    $csvPath = "D:\Users\jshamoon\Desktop\scriptdocuments\usernames.csv"
+
+    # Read the usernames from the CSV document
+    $usernames = Import-Csv -Path $csvPath
+
+    # Define the group names
+    $adminGroup = "LSEG-DXD-DEV-ADMIN"
+    $standardGroup1 = "FUNC-BeyondTrust-StandardAccounts"
+    $standardGroup2 = "POL-BeyondTrust-Password-AutoApproval"
+
+    # Iterate through each username and check for the -a account in Active Directory
+    foreach ($username in $usernames) {
+        $accountName = $username.usernames
+        $accountNameA = $accountName + "-a"
+        
+        # Output the username being processed for clarity
+        Write-Host "Processing $accountName and $accountNameA accounts:" -ForegroundColor Cyan
+
+        # Try to get the -a account from Active Directory
+        $accountA = Get-ADUser -Filter "SamAccountName -eq '$accountNameA'" -Properties Enabled -ErrorAction SilentlyContinue
+
+        # Check if the -A account is active
+        if ($accountA -and $accountA.Enabled) {
+            Write-Host "Y - $accountNameA is active."
+        } else {
+            Write-Host "N - $accountNameA is not active or does not exist."
+        }
+
+        # Check if the account is part of the required BeyondTrust groups
+        if ($accountA) {
+            $groups = Get-ADPrincipalGroupMembership $accountA | Select-Object -ExpandProperty Name
+            $group1Check = $standardGroup1 -in $groups
+            $group2Check = $standardGroup2 -in $groups
+
+            if ($group1Check -and $group2Check) {
+                Write-Host "Y - $accountNameA is a member of both BeyondTrust groups."
+            } else {
+                Write-Host "N - $accountNameA is not a member of both BeyondTrust groups."
+            }
+        }
+    }
+}
+
+accountscript2
