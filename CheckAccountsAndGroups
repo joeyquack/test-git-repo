@@ -1,9 +1,13 @@
 function CheckAccountStatusAndGroupMembership {
     Import-Module ActiveDirectory
     $csvPath = "D:\Users\jshamoon\Desktop\scriptdocuments\usernames.csv"
+    $outputTxtPath = "D:\Users\jshamoon\Desktop\scriptdocuments\NonCompliantUsernames.txt"
     $usernames = Import-Csv -Path $csvPath
     $standardGroup1 = "FUNC-BeyondTrust-StandardAccounts"
     $standardGroup2 = "POL-BeyondTrust-Password-AutoApproval"
+
+    # Clear or create the output text file
+    "" | Out-File $outputTxtPath
 
     foreach ($username in $usernames) {
         $accountName = $username.usernames # Replace 'usernames' with your CSV column name
@@ -20,6 +24,11 @@ function CheckAccountStatusAndGroupMembership {
             $groups = Get-ADPrincipalGroupMembership $account | Select-Object -ExpandProperty Name
             $isInGroups = if (($standardGroup1 -in $groups) -and ($standardGroup2 -in $groups)) { "Y" } else { "N" }
             Write-Host "$accountName BeyondTrust groups: $isInGroups"
+
+            # If admin account is active but not in both BeyondTrust groups, add to text file
+            if ($isActive -eq "Y" -and $isInGroups -eq "N") {
+                $accountName | Out-File $outputTxtPath -Append
+            }
         } else {
             Write-Host "$accountName BeyondTrust groups: N"
         }
