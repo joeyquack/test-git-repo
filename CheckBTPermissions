@@ -15,12 +15,12 @@ function CheckGroupMembership {
             $group2Check = $standardGroup2 -in $groups
 
             if ($group1Check -and $group2Check) {
-                Write-Host "Y"
+                Write-Host "$accountName: Y"
             } else {
-                Write-Host "N"
+                Write-Host "$accountName: N"
             }
         } else {
-            Write-Host "N"
+            Write-Host "$accountName: N"
         }
     }
 }
