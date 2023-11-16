@@ -1,0 +1,18 @@
+function CheckActiveAccount {
+    Import-Module ActiveDirectory
+    $csvPath = "D:\Users\jshamoon\Desktop\scriptdocuments\usernames.csv"
+    $usernames = Import-Csv -Path $csvPath
+
+    foreach ($username in $usernames) {
+        $accountNameA = $username.usernames + "-a"
+        $accountA = Get-ADUser -Filter "SamAccountName -eq '$accountNameA'" -Properties Enabled -ErrorAction SilentlyContinue
+
+        if ($accountA -and $accountA.Enabled) {
+            Write-Host "Y"
+        } else {
+            Write-Host "N"
+        }
+    }
+}
+
+CheckActiveAccount
