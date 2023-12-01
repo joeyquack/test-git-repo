@@ -1,0 +1,29 @@
+PS C:\Users\jmacilev1-a\Downloads\choco-remixer-master> Invoke-InternalizeChocoPkg
+VERBOSE: Falling back to checking next to module for config.xml
+VERBOSE: Falling back to checking one level up for config.xml
+VERBOSE: Falling back to checking next to module for internalized.xml
+VERBOSE: Falling back to checking one level up for internalized.xml
+VERBOSE: Falling back to checking next to module for repo-check.xml
+VERBOSE: Falling back to checking one level up for repo-check.xml
+VERBOSE: Falling back to checking next to module for download.xml
+VERBOSE: Falling back to checking one level up for download.xml
+VERBOSE: Using config XML at C:\Users\jmacilev1-a\Downloads\choco-remixer-master\config.xml
+VERBOSE: Using internalized XML at C:\Users\jmacilev1-a\Downloads\choco-remixer-master\internalized.xml
+VERBOSE: Using repo-check XML at C:\Users\jmacilev1-a\Downloads\choco-remixer-master\repo-check.xml
+VERBOSE: Checking for packages in C:\Users\jmacilev1-a\Documents\test
+Found dotnet-7.0-runtime 7.0.13 to internalize
+Starting dotnet-7.0-runtime
+VERBOSE: Extracting dotnet-7.0-runtime.nuspec to C:\Users\jmacilev1-a\Downloads\dotnet-7.0-runtime\7.0.13\dotnet-7.0-runtime.nuspec
+VERBOSE: Extracting tools/data.ps1 to C:\Users\jmacilev1-a\Downloads\dotnet-7.0-runtime\7.0.13\tools\data.ps1
+VERBOSE: Extracting tools/ChocolateyInstall.ps1 to C:\Users\jmacilev1-a\Downloads\dotnet-7.0-runtime\7.0.13\tools\ChocolateyInstall.ps1
+WARNING: dotnet-7.0-runtime 7.0.13 failed downloading or editing
+WARNING: Error details:
+A parameter cannot be found that matches parameter name 'url'.
+    Get-FileWithCache -PackageID $obj.nuspecID -PackageVersion $obj.version -url $url -filename $filename32 -folder $obj.toolsDir -checksumTypeType
+'sha512' -checksum $checksum32
+ 
+at Convert-dotnetcore-general-internalizer, C:\Users\jmacilev1-a\Downloads\choco-remixer-master\choco-remixer\pkgs\PkgFunctions-install.ps1: line 402
+at Invoke-InternalizeChocoPkg, C:\Users\jmacilev1-a\Downloads\choco-remixer-master\choco-remixer\public\Invoke-InternalizeChocoPkg.ps1: line 191
+at <ScriptBlock>, <No file>: line 1
+VERBOSE: dotnet-7.0-runtime  not internalized
+dotnet-7.0-runtime 7.0.13 edit failed
